@@ -6,10 +6,11 @@ use App\Http\Controllers\ProductController;
 
 Route::get('/', [EventController::class, 'index']);
 Route::get('/events/create', [EventController::class, 'create']);
+Route::post('/events', [EventController::class, 'store']);
 
-Route::get('/contact', [ContactController::class, 'index']);
-
-Route::get('/produtos', [ProductController::class, 'index']);
+Route::get('/contact', function () {
+    return view('contact');
+});
 
 
 

@@ -16,6 +16,10 @@ header {
     border-bottom: 1px solid #CCC;
 }
 
+.space {
+    padding-bottom: 15px;
+}
+
 .row {
     margin: 0;
 }

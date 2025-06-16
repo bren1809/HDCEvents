@@ -48,4 +48,14 @@ class EventController extends Controller
 
     }
 
+    public function show($id) {
+    
+        $event = Event::findOrFail($id); // procura no banco um registro na tabela com aquele id, se encontrar atribui esse evento, se não retorna um erro
+
+        return view('events.show', ['event' => $event]); // permite mostrar os detalhes desse evento
+
+    }
 }
+
+
+

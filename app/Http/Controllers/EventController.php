@@ -10,10 +10,20 @@ class EventController extends Controller
 {
     
     public function index() {
+
+        $search = request('search'); // Valor da URL através do parâmetro SEARCH
+
+        if($search) {
+
+            $events = Event::where([
+                ['title', 'like', '%'.$search.'%']
+            ])->get(); // Lógica de busca do evento
+
+        } else {
+            $events = Event::all(); // Nenhum valor digitado traz todos os eventos do banco
+        }
         
-        $events = Event::all();
-        
-        return view('welcome', ['events' => $events]);
+        return view('welcome', ['events' => $events, 'search' => $search]);
     }
 
     public function create() {

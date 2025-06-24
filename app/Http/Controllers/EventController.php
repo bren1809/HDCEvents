@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Event;
+use App\Models\User;
 
 class EventController extends Controller
 {
@@ -54,6 +55,9 @@ class EventController extends Controller
 
         }
 
+        $user = auth()->user(); // Acesso ao auth que nos da acesso ao user
+        $event->user_id = $user->id; // Cria o vínculo ao banco que esse evento agora pertence a esse usuário
+
         $event->save();
 
         return redirect('/')->with('msg', 'Evento criado com sucesso!');
@@ -64,8 +68,18 @@ class EventController extends Controller
     
         $event = Event::findOrFail($id); // procura no banco um registro na tabela com aquele id, se encontrar atribui esse evento, se não retorna um erro
 
-        return view('events.show', ['event' => $event]); // permite mostrar os detalhes desse evento
+        $eventOwner = User::where('id', $event->user_id)->first()->toArray(); // Aqui conseguimos ter acesso ao usuário e selecionar o primeiro que encontrar
 
+        return view('events.show', ['event' => $event, 'eventOwner' => $eventOwner]); // permite mostrar os detalhes desse evento
+
+    }
+
+    public function dashboard() {
+        $user = auth()->user();
+
+        $events = $user->events;
+
+        return view('events.dashboard', ['events' => $events]);
     }
 }
 

@@ -10,6 +10,7 @@ Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show'
 Route::post('/events', [EventController::class, 'store'])->name('events.store'); // "store" para enviar os dados no banco
 Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('events.destroy')->middleware('auth'); // "destroy" deleta um evento do banco por meio dessa rota
 Route::get('/events/edit/{id}', [EventController::class, 'edit'])->name('events.edit')->middleware('auth'); // "edit" para mostrar um form de edição de registro no banco
+Route::put('/events/update/{id}', [EventController::class, 'update'])->name('events.update')->middleware('auth'); // "update" para atualizar os dados no banco
 
 Route::get('/contact', function () {
     return view('contact');

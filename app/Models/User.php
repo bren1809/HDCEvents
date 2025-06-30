@@ -68,4 +68,8 @@ class User extends Authenticatable
     public function events() {
         return $this->hasMany('App\Models\Event');  // Aqui faz a atrelação, agora posso saber quais são os eventos de um "user" e vice versa
     }
+
+    public function eventsAsParticipant() {
+        return $this->belongsToMany('App\Models\Event'); // Aqui faz a atrelação, agora posso saber quais são os eventos que o usuário participa
+    }
 }

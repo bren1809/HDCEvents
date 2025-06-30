@@ -16,6 +16,10 @@ class Event extends Model
 
 
     public function user() {
-        return $this->belongsTo('App\Models\User'); // Está dizendo que este modelo pertence a um usuário
+        return $this->belongsTo('App\Models\User'); // "Pertence a um usuário", ou seja, um evento só pode ter um usuário associado a ele
+    }
+
+    public function users() {
+        return $this->belongsToMany('App\Models\User'); // "Pertence a muitos usuários", ou seja, um evento pode ter vários usuários associados a ele
     }
 }

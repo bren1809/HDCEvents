@@ -8,7 +8,8 @@ Route::get('/', [EventController::class, 'index'])->name('home'); // "index" mos
 Route::get('/events/create', [EventController::class, 'create'])->name('events.create')->middleware('auth'); // "create" para mostrar um form de criar registro no banco
 Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show'); // "show" mostra um dado específico
 Route::post('/events', [EventController::class, 'store'])->name('events.store'); // "store" para enviar os dados no banco
-Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('events.destroy'); // "destroy" deleta um evento do banco por meio dessa rota
+Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('events.destroy')->middleware('auth'); // "destroy" deleta um evento do banco por meio dessa rota
+Route::get('/events/edit/{id}', [EventController::class, 'edit'])->name('events.edit')->middleware('auth'); // "edit" para mostrar um form de edição de registro no banco
 
 Route::get('/contact', function () {
     return view('contact');

@@ -79,7 +79,10 @@ class EventController extends Controller
 
         $events = $user->events;
 
-        return view('events.dashboard', ['events' => $events]);
+        $eventsAsParticipant = $user->eventsAsParticipant; // Aqui conseguimos pegar os eventos que o usuário está participando
+
+        return view('events.dashboard', 
+        ['events' => $events, 'eventsAsParticipant' => $eventsAsParticipant]); // Retorna a view do dashboard com os eventos do usuário logado
     }
 
     public function destroy($id) {
@@ -91,7 +94,13 @@ class EventController extends Controller
 
     public function edit($id) {
 
+        $user = auth()->user(); // Acesso ao auth que nos da acesso ao user
+
         $event = Event::findOrFail($id); // Busca o evento pelo id
+
+        if($event->user_id != $user->id) { // Verifica se o usuário logado é o dono do evento
+            return redirect('/dashboard')->with('msg', 'ATENÇÃO: Você não tem permissão para editar este evento!'); // Retorna para o dashboard e envia uma mensagem
+        }
 
         return view('events.edit', ['event' => $event]); // Retorna a para a view de edição do evento
 

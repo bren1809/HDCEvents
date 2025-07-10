@@ -68,9 +68,23 @@ class EventController extends Controller
     
         $event = Event::findOrFail($id); // procura no banco um registro na tabela com aquele id, se encontrar atribui esse evento, se não retorna um erro
 
+        $user = auth()->user();
+        $hasUserJoined = false; // Variável para verificar se o usuário está participando do evento
+
+        if($user) {
+            $userEvents = $user->eventsAsParticipant->toArray();
+
+            foreach($userEvents as $userEvent) {
+                if($userEvent['id'] == $event->id) { // Verifica se o id do evento do usuário é igual ao id do evento que está sendo exibido
+                    $hasUserJoined = true; // Se sim, o usuário está participando do evento
+                    break; // Interrompe o loop, pois já encontrou o evento
+                }
+            }
+        }
+
         $eventOwner = User::where('id', $event->user_id)->first()->toArray(); // Aqui conseguimos ter acesso ao usuário e selecionar o primeiro que encontrar
 
-        return view('events.show', ['event' => $event, 'eventOwner' => $eventOwner]); // permite mostrar os detalhes desse evento
+        return view('events.show', ['event' => $event, 'eventOwner' => $eventOwner, 'hasUserJoined' => $hasUserJoined]); // permite mostrar os detalhes desse evento
 
     }
 
@@ -135,9 +149,21 @@ class EventController extends Controller
 
         if(!$user->eventsAsParticipant->contains($event)) { // Verifica se o usuário já está participando do evento
             $user->eventsAsParticipant()->attach($id); // Adiciona o evento ao usuário
-            return redirect('/dashboard')->with('msg', 'Sua presença está confirmada no evento: "' . $event->title . '"!'); // Retorna para o dashboard e envia uma mensagem
+            return redirect('/')->with('msg', 'Sua presença está confirmada no evento: "' . $event->title . '"!'); // Retorna para o dashboard e envia uma mensagem
         } else {
             return redirect('/dashboard')->with('msg', 'ATENÇÃO: Você já está inscrito neste evento!');
+        }
+    }
+
+    public function leaveEvent($id) {
+        $user = auth()->user(); // Acesso ao auth que nos da acesso ao user
+        $event = Event::findOrFail($id); // Busca o evento pelo id
+
+        if($user->eventsAsParticipant->contains($event)) { // Verifica se o usuário está participando do evento
+            $user->eventsAsParticipant()->detach($id); // Remove o evento do usuário
+            return redirect('/dashboard')->with('msg', 'Você saiu do evento: "' . $event->title . '"!'); // Retorna para o dashboard e envia uma mensagem
+        } else {
+            return redirect('/dashboard')->with('msg', 'ATENÇÃO: Você não está inscrito neste evento!');
         }
     }
 }

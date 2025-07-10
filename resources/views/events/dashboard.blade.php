@@ -61,7 +61,11 @@
                     <td><a href="{{route('events.show', $event->id)}}">{{$event->title}}</a></td>
                     <td>{{ $event->users->count() }}</td>
                     <td>
-                        <a href="#" class="btn btn-danger delete-btn"><ion-icon name="trash-outline"></ion-icon>Deixar evento</a>
+                        <form action="{{route('events.leave', $event->id)}}" method="POST" class="delete-form">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger delete-btn"><ion-icon name="trash-outline"></ion-icon>Deixar evento</button>
+                        </form>
                     </td>
                 </tr>
             @endforeach

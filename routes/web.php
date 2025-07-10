@@ -20,3 +20,4 @@ Route::get('/dashboard', [EventController::class, 'dashboard'])->name('dashboard
 
 Route::post('/events/join/{id}', [EventController::class, 'joinEvent'])->name('events.join')->middleware('auth'); // Rota para o usuário participar de um evento
 
+Route::delete('/events/leave/{id}', [EventController::class, 'leaveEvent'])->name('events.leave')->middleware('auth'); // Rota para o usuário deixar um evento
